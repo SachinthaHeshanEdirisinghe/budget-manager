@@ -23,7 +23,7 @@ function Pill({ icon, label, value, color }) {
 }
 
 export default function HomeScreen({ navigation }) {
-  const { transactions, totals } = useFinance();
+  const { transactions, totals, resetAll, loadDemoData } = useFinance();
   const insets = useSafeAreaInsets();
   const recent = transactions.slice(0, 5);
 
@@ -37,7 +37,22 @@ export default function HomeScreen({ navigation }) {
           <Text style={styles.hello}>Welcome back 👋</Text>
           <Text style={styles.name}>My Wallet</Text>
         </View>
-        {/* Day 6: demo and reset buttons go here */}
+                <View style={{ flexDirection: 'row', gap: 10 }}>
+          <TouchableOpacity style={styles.iconBtn} onPress={loadDemoData}>
+            <Ionicons name='sparkles-outline' size={20} color={colors.primary} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.iconBtn}
+            onPress={() =>
+              Alert.alert('Reset all data?', 'All transactions will be deleted.', [
+                { text: 'Cancel', style: 'cancel' },
+                { text: 'Reset', style: 'destructive', onPress: resetAll },
+              ])
+            }
+          >
+            <Ionicons name='trash-outline' size={20} color={colors.expense} />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <LinearGradient colors={[colors.primary, '#a29bfe']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.card}>
@@ -66,6 +81,7 @@ export default function HomeScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  iconBtn: { width: 42, height: 42, borderRadius: 21, backgroundColor: colors.card, alignItems: 'center', justifyContent: 'center', ...shadow },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18 },
   hello: { color: colors.muted, fontSize: 14 },
   name: { color: colors.text, fontSize: 24, fontWeight: '800' },
