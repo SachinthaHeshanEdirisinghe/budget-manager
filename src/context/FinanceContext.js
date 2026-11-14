@@ -38,6 +38,24 @@ export function FinanceProvider({ children }) {
 
   const deleteTransaction = (id) => setTransactions((prev) => prev.filter((t) => t.id !== id));
 
+    const resetAll = () => {
+    setTransactions([]);
+    setBudget(50000);
+  };
+
+  const loadDemoData = () => {
+    const ago = (days) => new Date(Date.now() - days * 86400000).toISOString();
+    setTransactions([
+      { id: 'd1', type: 'income', amount: 120000, category: 'salary', note: 'Monthly salary', date: ago(6) },
+      { id: 'd2', type: 'expense', amount: 4500, category: 'food', note: 'Groceries', date: ago(5) },
+      { id: 'd3', type: 'expense', amount: 2500, category: 'transport', note: 'Bus and fuel', date: ago(4) },
+      { id: 'd4', type: 'expense', amount: 8200, category: 'bills', note: 'Electricity bill', date: ago(3) },
+      { id: 'd5', type: 'income', amount: 15000, category: 'freelance', note: 'Website project', date: ago(2) },
+      { id: 'd6', type: 'expense', amount: 6800, category: 'shopping', note: 'New shoes', date: ago(1) },
+      { id: 'd7', type: 'expense', amount: 1800, category: 'fun', note: 'Movie night', date: ago(0) },
+    ]);
+  };
+
   const totals = useMemo(() => {
     const now = new Date();
     let income = 0;
@@ -54,7 +72,8 @@ export function FinanceProvider({ children }) {
     return { income, expense, balance: income - expense, monthExpense };
   }, [transactions]);
 
-  const value = { transactions, budget, setBudget, addTransaction, deleteTransaction, totals, loaded };
+    const value = { transactions, budget, setBudget, addTransaction, deleteTransaction, totals, loaded, resetAll, loadDemoData };
+  
   return <FinanceContext.Provider value={value}>{children}</FinanceContext.Provider>;
 }
 
